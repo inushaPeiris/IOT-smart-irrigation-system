@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Agro IoT Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+      /* background-color: aliceblue; */
+      background: linear-gradient(to bottom, #a8e063, #56ab2f);
+      height: 100vh;
+    }
+    
+    .container {
+      margin-top: 5rem;
+      padding: 4rem;
+      background: #006e1d40;
+      border-radius: 2rem;
+    }
+
+    .data {
+      background-color: #f0f0f0;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .btn1 {
+      background-color: #00fd2a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 0.5rem;
+    }
+
+    .btn2 {
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 0.5rem;
+    }
+
+    .btn:hover {
+      opacity: 0.8;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      color: rgb(231, 231, 231);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 style="color: #efefef;">Smart Agro IoT Dashboard</h1>
+
+    <div id="humidity" class="data">Humidity: --%</div>
+    <div id="temperature" class="data">Temperature: --°C</div>
+    <div id="soilMoisture" class="data">Soil Moisture: --%</div>
+    <div id="phValue" class="data">pH Value: --</div>
+
+    <div>
+      <button class="btn1" onclick="toggleActuator('on')">Turn On LED</button>
+      <button class="btn2" onclick="toggleActuator('off')">Turn Off LED</button>
+    </div>
+
+    <div id="actuatorStatus" class="data">Actuator Status: Unknown</div>
+  </div>
+
+  <script>
+    function fetchSensorData() {
+      fetch('/get_sensor_data')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('humidity').innerText = `Humidity: ${data.humidity}%`;
+          document.getElementById('temperature').innerText = `Temperature: ${data.temperature}°C`;
+          document.getElementById('soilMoisture').innerText = `Soil Moisture: ${data.soil_moisture}%`;
+          document.getElementById('phValue').innerText = `pH Value: ${data.ph_value}`;
+        })
+        .catch(error => console.error('Error fetching sensor data:', error));
+    }
+
+    function fetchActuatorState() {
+      fetch('/get_actuator_state')
+        .then(response => response.json())
+        .then(data => {
+          const status = data.actuator_state.toUpperCase();
+          document.getElementById('actuatorStatus').innerText = `Actuator Status: ${status}`;
+        })
+        .catch(error => console.error('Error fetching actuator state:', error));
+    }
+
+    function toggleActuator(state) {
+      fetch('/toggle_actuator', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `state=${state}`
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.message);
+          fetchActuatorState();
+        })
+        .catch(error => console.error('Error toggling actuator:', error));
+    }
+
+    // Fetch data every 5 seconds
+    setInterval(fetchSensorData, 300000);
+    setInterval(fetchActuatorState, 300000);
+
+    // Initial fetch
+    fetchSensorData();
+    fetchActuatorState();
+  </script>
+
+  <footer class="footer">© 2024 Smart Agro IoT Dashboard</footer>
+</body>
+
+</html>

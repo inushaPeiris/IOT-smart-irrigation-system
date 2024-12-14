@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Agro IoT System - Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #a8e063, #56ab2f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 20px 30px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      color: #56ab2f;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .login-container h2 {
+      color: #a8e063;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #d9d9d9;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .login-btn {
+      background: #56ab2f;
+      color: #ffffff;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .login-btn:hover {
+      background: #45a026;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Smart Agro IoT System</h1>
+    <h2>Group – DPG16</h2>
+    <input id="username" class="input-field" type="text" placeholder="Enter Username">
+    <input id="password" class="input-field" type="password" placeholder="Enter Password">
+    <button class="login-btn" onclick="validateLogin()">Login</button>
+    <div id="error-message" class="error-message"></div>
+  </div>
+
+  <script>
+    function validateLogin() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('error-message');
+      errorMessage.textContent = '';
+
+      if (username === 'admin' && password === 'admin123') {
+        // Replace "your-page-url.html" with the actual URL of the target page
+        window.location.href = 'http://127.0.0.1:5000/dashboard';
+      } else {
+        errorMessage.textContent = 'Invalid Username or Password!';
+      }
+    }
+  </script>
+</body>
+</html>
